@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import { Admin, Resource, ListGuesser, EditGuesser } from 'react-admin';
+import { UserList } from "./users";
+import Dashboard from "./Dashboard.js"
+import authProvider from './authProvider';
+import { PostCreate, PostEdit, PostList } from "./posts";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import PostIcon from '@mui/icons-material/Book';
+import UserIcon from '@mui/icons-material/Group';
+
+import jsonServerProvider from 'ra-data-json-server';
+
+const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
+
+const App = () => (
+
+  <Admin dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
+    <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} icon={PostIcon} />
+    {/* 'ReferenceField' in the PostList component creates RecordContext and displays recordRepresentation (children)  */}
+    {/* this is how to link/use the foreign key provided in 'referene' prop */}
+    <Resource name="users" list={UserList} icon={UserIcon} recordRepresentation="name" />
+  </Admin>
+
+);
+
 
 export default App;
